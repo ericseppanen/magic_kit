@@ -1,0 +1,18 @@
+[package]
+name = "magic_kit_macros"
+description = "macros for the magic_kit crate"
+repository = ""
+license = "MIT"
+authors = ["Eric Seppanen <eds@reric.net>"]
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+freezebox = "0.2"
+quote = "1.0"
+syn = {version = "1.0", features = ["extra-traits", "full"]}
+proc-macro2 = "1.0"
+heck = "0.3"
