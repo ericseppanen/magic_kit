@@ -1,7 +1,7 @@
 [package]
 name = "magic_kit_macros"
 description = "macros for the magic_kit crate"
-repository = ""
+repository = "https://github.com/ericseppanen/magic_kit"
 license = "MIT"
 authors = ["Eric Seppanen <eds@reric.net>"]
 version = "0.1.0"
