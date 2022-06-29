@@ -6,6 +6,7 @@ license = "MIT"
 authors = ["Eric Seppanen <eds@reric.net>"]
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.56"
 
 [lib]
 proc-macro = true
