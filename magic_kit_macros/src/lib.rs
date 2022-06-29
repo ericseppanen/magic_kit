@@ -1,4 +1,4 @@
-use heck::SnakeCase;
+use heck::ToSnakeCase;
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
 use syn::punctuated::Punctuated;
@@ -30,7 +30,7 @@ fn make_snake_ident(ty: &Type) -> Ident {
 
 // from Ident{A} to "a: FreezeBox<Arc<A>>"
 fn gen_field(ty: &Type) -> TokenStream {
-    let field_name = make_snake_ident(&ty);
+    let field_name = make_snake_ident(ty);
     quote! {
         #field_name: ::freezebox::FreezeBox<::std::sync::Arc<#ty>>,
     }
@@ -130,7 +130,6 @@ fn gen_kitget_user_arc(name: &Ident, field_name: &Ident, ty: &Type) -> TokenStre
 }
 
 fn gen_kitgen_bound(name: &AttrList) -> Punctuated<TypeParamBound, token::Add> {
-    use std::iter::FromIterator;
     let iter = name.iter().map(|ty| {
         let s = quote! { ::magic_kit::KitGet<#ty> };
         let bound: TraitBound = parse2(s).unwrap();
@@ -199,21 +198,21 @@ pub fn lazy_kit(
     let struct_name = &item.ident;
     let vis = &item.vis;
 
-    let generated_fields = generated_names.iter().map(|ty| gen_field(ty));
-    let generated_inits = generated_names.iter().map(|ty| gen_default_init(ty));
+    let generated_fields = generated_names.iter().map(gen_field);
+    let generated_inits = generated_names.iter().map(gen_default_init);
 
     let user_fields = match &item.fields {
         Fields::Named(FieldsNamed { named, .. }) => named,
         _ => panic!("failed to extract named fields"),
     };
-    let user_params = user_fields.iter().map(|f| gen_user_param(f));
-    let user_inits = user_fields.iter().map(|f| gen_user_init(f));
+    let user_params = user_fields.iter().map(gen_user_param);
+    let user_inits = user_fields.iter().map(gen_user_init);
     // User fields "Arc<T>" represented as (name, T)
     let user_arc_fields = user_fields.iter().filter_map(arc_field);
 
     let generated_kitget = generated_names.iter().map(|ty| gen_kitget(struct_name, ty));
     let user_arc_kitget =
-        user_arc_fields.map(|(name, ty)| gen_kitget_user_arc(struct_name, name, &ty));
+        user_arc_fields.map(|(name, ty)| gen_kitget_user_arc(struct_name, name, ty));
 
     let expanded = quote! {
         #[automatically_derived]
@@ -258,7 +257,7 @@ pub fn magic_kit(
     let struct_name = &item.ident;
     let vis = &item.vis;
 
-    let generated_fields = generated_names.iter().map(|i| gen_field_arc(i));
+    let generated_fields = generated_names.iter().map(gen_field_arc);
     //let generated_inits = generated_names.iter().map(|i| gen_default_init(i));
 
     let user_fields = match &item.fields {
@@ -273,7 +272,7 @@ pub fn magic_kit(
         .map(|ty| gen_kitget_arc(struct_name, ty));
 
     let generated_bound = gen_kitgen_bound(&generated_names);
-    let from_inits = generated_names.iter().map(|ty| gen_from_init(ty));
+    let from_inits = generated_names.iter().map(gen_from_init);
 
     let expanded = quote! {
         #[automatically_derived]

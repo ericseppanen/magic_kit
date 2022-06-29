@@ -7,8 +7,9 @@ repository = "https://github.com/ericseppanen/magic_kit"
 license = "MIT"
 authors = ["Eric Seppanen <eds@reric.net>"]
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
+rust-version = "1.56"
 
 [dependencies]
 magic_kit_macros = { path = "magic_kit_macros" }
-freezebox = "0.2"
+freezebox = "0.2.3"
