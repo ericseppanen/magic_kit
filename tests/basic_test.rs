@@ -71,5 +71,4 @@ fn test1() {
     struct CompKitCB {}
 
     let _kit5 = CompKitCB::from(&kit);
-
 }
