@@ -1,15 +1,8 @@
-[package]
-name = "magic_kit"
-description = "Shared singleton objects, lazily constructed"
-keywords = ["container", "singleton", "lazy"]
-categories = ["data-structures"]
-repository = "https://github.com/ericseppanen/magic_kit"
-license = "MIT"
-authors = ["Eric Seppanen <eds@reric.net>"]
-version = "0.1.0"
-edition = "2021"
-rust-version = "1.56"
+[workspace]
 
-[dependencies]
-magic_kit_macros = { path = "magic_kit_macros" }
-freezebox = "0.2.3"
+members = [
+    "magic_kit",
+    "magic_kit_macros",
+]
+
+
